@@ -1,23 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import Header from './components/Header'
+
+const api = {
+  key: "41bc47c6426a856a0b22036586852e8b",
+  base: "http://api.openweathermap.org/data/2.5/"
+}
 
 function App() {
+  const getWeather = async (query) => {
+    const loc = `${api.base}weather?q=${query}&appid=${api.key}`
+    const res = await fetch(loc)
+    const data = await res.json()
+    console.log(data.weather[0].main)
+
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header getData={ getWeather }/>
     </div>
   );
 }
