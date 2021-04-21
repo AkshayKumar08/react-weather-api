@@ -13,10 +13,10 @@ function App() {
 
 
   const [curTemp, setCurTemp] = useState(0)
-  const [minTemp, setMinTemp] = useState(0)
-  const [maxTemp, setMaxTemp] = useState(0)
+  const [minTemp, setMinTemp] = useState()
+  const [maxTemp, setMaxTemp] = useState()
   const [weather, setWeather] = useState('')
-  const [region, setRegion] = useState('')
+  const [region, setRegion] = useState('Enter Location')
   // const [lastUpdate, setlastUpdate] = useState('')
   // const [error, setError] = useState('')
 

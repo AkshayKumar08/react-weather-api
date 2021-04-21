@@ -18,6 +18,7 @@ const Header = ({ fetchData }) => {
 				<form onSubmit={ onSubmit }>
 					<input 
 					type="text" 
+					placeholder="Enter Location"
 					onChange={ (e) => setRegion(e.target.value)}/>
 					<Button />
 				</form>

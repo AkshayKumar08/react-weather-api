@@ -2,7 +2,7 @@ const Footer = ({ region }) => {
 	return (
 		<>
 			<div>
-				<h3>Location: { region }</h3>
+				<h3 className="location" >Location: { region }</h3>
 			</div>
 			{/*
 			<div>
