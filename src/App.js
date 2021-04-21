@@ -1,7 +1,7 @@
 import Header from './components/Header'
 import Section from './components/Section'
 import Footer from './components/Footer'
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import './App.css'
 
 const api = {
@@ -11,36 +11,47 @@ const api = {
 
 function App() {
 
-
   const [curTemp, setCurTemp] = useState(0)
   const [minTemp, setMinTemp] = useState()
   const [maxTemp, setMaxTemp] = useState()
   const [weather, setWeather] = useState('')
   const [region, setRegion] = useState('Enter Location')
-  // const [lastUpdate, setlastUpdate] = useState('')
+  const [lastUpdate, setlastUpdate] = useState(1)
   // const [error, setError] = useState('')
 
-  const getWeather = async (query) => {
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition( (position) => {
+      const latitude = position.coords.latitude
+      const longitude = position.coords.longitude
+      const loc = `${api.base}weather?lat=${latitude}&lon=${longitude}&appid=${api.key}`
+      fetchData(loc)
+    })
+  }, [])
+
+  const fetchData = async(api) => {  
     try{
-      const loc = `${api.base}weather?q=${query}&appid=${api.key}`
-      const res = await fetch(loc)
+      const res = await fetch(api)
       const data = await res.json()
       if( data.cod === 200){
         setCurTemp(parseInt(data.main.temp-273))
         setMinTemp(parseInt(data.main.temp_max-273))
         setMaxTemp(parseInt(data.main.temp_min-273))
-        setWeather(data.weather[0].main)
-        setRegion(query)
+        setWeather(data.weather[0].main)        
+        setRegion(data.name)
       }
       else{ 
         const err = 'Location not found'
         setRegion(err)
       }
     }
-    catch(err){
-      
-    }
+    catch(err){}    
   }
+
+  const getWeather = async (query) => {
+      const loc = `${api.base}weather?q=${query}&appid=${api.key}`
+      fetchData(loc)
+  }
+
   return (
     <div className="container">
       <Header fetchData={ getWeather }/>
@@ -50,7 +61,7 @@ function App() {
       minTemp={ minTemp }
       maxTemp={ maxTemp }
       weather={ weather } />
-      <Footer region={ region }/>
+      <Footer region={ region } lastUpdate={ lastUpdate }/>
     </div>
   );
 }

@@ -73,9 +73,13 @@ body {
   color: #fff;
 }
 
-.temp h3, .location{
+.temp h3{
 	font-size: 2em;
   color: #fff;
+}
+
+.location, .update{
+ color: #fff; 
 }
 
 .center{
