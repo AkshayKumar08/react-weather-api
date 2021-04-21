@@ -1,4 +1,8 @@
 import Header from './components/Header'
+import Section from './components/Section'
+import Footer from './components/Footer'
+import {useState} from 'react'
+import './App.css'
 
 const api = {
   key: "41bc47c6426a856a0b22036586852e8b",
@@ -6,16 +10,47 @@ const api = {
 }
 
 function App() {
-  const getWeather = async (query) => {
-    const loc = `${api.base}weather?q=${query}&appid=${api.key}`
-    const res = await fetch(loc)
-    const data = await res.json()
-    console.log(data.weather[0].main)
 
+
+  const [curTemp, setCurTemp] = useState(0)
+  const [minTemp, setMinTemp] = useState(0)
+  const [maxTemp, setMaxTemp] = useState(0)
+  const [weather, setWeather] = useState('')
+  const [region, setRegion] = useState('')
+  // const [lastUpdate, setlastUpdate] = useState('')
+  // const [error, setError] = useState('')
+
+  const getWeather = async (query) => {
+    try{
+      const loc = `${api.base}weather?q=${query}&appid=${api.key}`
+      const res = await fetch(loc)
+      const data = await res.json()
+      if( data.cod === 200){
+        setCurTemp(parseInt(data.main.temp-273))
+        setMinTemp(parseInt(data.main.temp_max-273))
+        setMaxTemp(parseInt(data.main.temp_min-273))
+        setWeather(data.weather[0].main)
+        setRegion(query)
+      }
+      else{ 
+        const err = 'Location not found'
+        setRegion(err)
+      }
+    }
+    catch(err){
+      
+    }
   }
   return (
-    <div className="App">
-      <Header getData={ getWeather }/>
+    <div className="container">
+      <Header fetchData={ getWeather }/>
+      {/*<p >{region}:{error}:{data.main}:{data.description}</p>*/}
+      <Section
+      curTemp={ curTemp }
+      minTemp={ minTemp }
+      maxTemp={ maxTemp }
+      weather={ weather } />
+      <Footer region={ region }/>
     </div>
   );
 }

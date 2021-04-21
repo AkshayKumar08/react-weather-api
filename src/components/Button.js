@@ -1,10 +1,6 @@
 const Button = () => {
-	return (
-		<div>
-		<input 
-		type='submit' 
-		value='click'/>
-		</div>
+	return (		
+		<input className="btn btn-block" type='submit' value='submit'/>
 	)
 }
 
