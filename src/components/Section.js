@@ -1,15 +1,15 @@
-const Section = ({ curTemp, minTemp, maxTemp, weather }) =>{
+const Section = ({ weather }) =>{
 
 	return (
 		<div>
 			<div className="temp center">
-				<h1>{parseInt(curTemp)}°C</h1>
+				<h1>{weather.curTemp}°C</h1>
 			</div>
 			<div className="temp center">
-				<h3>{minTemp}°C / {maxTemp}°C</h3>
+				<h3>{weather.minTemp}°C / {weather.maxTemp}°C</h3>
 			</div>
 			<div className="temp center">
-				<h3>{weather}</h3>
+				<h3>{weather.main}</h3>
 			</div>
 		</div>
 	)

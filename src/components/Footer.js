@@ -1,13 +1,10 @@
-const Footer = ({ region, lastUpdate }) => {
+const Footer = ({ weather }) => {
 	return (
 		<>
 			<div>
-				<h4 className="location" >Location: { region }</h4>
+				<h4 className="location" >Location: { weather.region }</h4>
 			</div>
 			
-			<div>
-				{/*<h4 className="update">Last Updated: {lastUpdate} seconds ago</h4>*/}
-			</div>
 		</>
 	)
 }

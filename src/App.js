@@ -10,20 +10,19 @@ const api = {
 }
 
 function App() {
-
-  const [curTemp, setCurTemp] = useState(0)
-  const [minTemp, setMinTemp] = useState()
-  const [maxTemp, setMaxTemp] = useState()
-  const [weather, setWeather] = useState('')
-  const [region, setRegion] = useState('Enter Location')
-  const [lastUpdate, setlastUpdate] = useState(1)
-  // const [error, setError] = useState('')
-
+  const [weather, setWeather] = useState({
+    curTemp: 0,
+    minTemp: 0,
+    maxTemp: 0,
+    main: '',
+    region: ''
+  })
+  
   useEffect(() => {
     navigator.geolocation.getCurrentPosition( (position) => {
       const latitude = position.coords.latitude
       const longitude = position.coords.longitude
-      const loc = `${api.base}weather?lat=${latitude}&lon=${longitude}&appid=${api.key}`
+      const loc = `${api.base}weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${api.key}`
       fetchData(loc)
     })
   }, [])
@@ -33,35 +32,40 @@ function App() {
       const res = await fetch(api)
       const data = await res.json()
       if( data.cod === 200){
-        setCurTemp(parseInt(data.main.temp-273))
-        setMinTemp(parseInt(data.main.temp_max-273))
-        setMaxTemp(parseInt(data.main.temp_min-273))
-        setWeather(data.weather[0].main)        
-        setRegion(data.name)
+        setWeather(prevState => ({
+          ...prevState,
+          curTemp: Math.round(data.main.temp),
+          minTemp: Math.round(data.main.temp_max),
+          maxTemp: Math.round(data.main.temp_min),
+          main: data.weather[0].main,
+          region: data.name
+        }))
       }
       else{ 
         const err = 'Location not found'
-        setRegion(err)
+        setWeather(prevState => ({
+          ...prevState,
+          curTemp: 0,
+          minTemp: 0,
+          maxTemp: 0,
+          main: '---',
+          region: 'location not found'
+        }))
       }
     }
     catch(err){}    
   }
 
   const getWeather = async (query) => {
-      const loc = `${api.base}weather?q=${query}&appid=${api.key}`
+      const loc = `${api.base}weather?q=${query}&units=metric&appid=${api.key}`
       fetchData(loc)
   }
 
   return (
     <div className="container">
       <Header fetchData={ getWeather }/>
-      {/*<p >{region}:{error}:{data.main}:{data.description}</p>*/}
-      <Section
-      curTemp={ curTemp }
-      minTemp={ minTemp }
-      maxTemp={ maxTemp }
-      weather={ weather } />
-      <Footer region={ region } lastUpdate={ lastUpdate }/>
+      <Section weather={ weather } />
+      <Footer weather={ weather } />
     </div>
   );
 }
